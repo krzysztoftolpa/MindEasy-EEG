@@ -26,11 +26,10 @@ def asr_for_condition(asr, fname: str, condition: str):
     return df_results
 
 
-def asr_for_both_conditions(fname_calibfile: str, fname_rest: str, fname_task: str):
+def asr_for_both_conditions(asr, fname_rest: str, fname_task: str):
 
-    asr = asr_calibration(fname_calibfile)
-    df_task = asr_for_condition(asr, fname=config.FNAME_TASK, condition='task')
-    df_rest = asr_for_condition(asr, fname=config.FNAME_REST, condition='rest')
+    df_task = asr_for_condition(asr, fname=fname_task, condition='task')
+    df_rest = asr_for_condition(asr, fname=fname_rest, condition='rest')
     df_all = pd.concat([df_rest, df_task])
 
     return df_all

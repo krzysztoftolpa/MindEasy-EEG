@@ -1,4 +1,7 @@
 import numpy as np
+import pickle
+import os
+from datetime import datetime
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
@@ -6,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 
 import config
-from calibration import asr_for_both_conditions
+from calibration import asr_calibration, asr_for_both_conditions
 from utils import balance_conditions
 
 CLASSIFIERS = {
@@ -21,8 +24,8 @@ PARAMETERS = {
     }
 }
 
-
-df_all = asr_for_both_conditions(fname_calibfile=config.FNAME_CALIBFILE,
+asr = asr_calibration(config.FNAME_CALIBFILE)
+df_all = asr_for_both_conditions(asr,
                                  fname_rest=config.FNAME_REST,
                                  fname_task=config.FNAME_TASK)
 
@@ -45,7 +48,7 @@ for name, clf in CLASSIFIERS.items():
     # Create a pipeline with the classifier
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
-        ('classifier', clf) #('scaler', StandardScaler()), ('selector', SelectKBest(f_classif))
+        ('classifier', clf)  # ('scaler', StandardScaler()), ('selector', SelectKBest(f_classif))
     ])
 
     # Perform grid search with stratified cross-validation
@@ -59,6 +62,13 @@ for name, clf in CLASSIFIERS.items():
     best_models[name]['score'] = grid_search.best_score_
     best_models[name]['params'] = grid_search.best_params_
 
-
 for name, model in best_models.items():
     print(f"Best model for {name}: {model}")
+
+    if config.SAVE_MODEL:
+        print('Saving model...')
+        now = datetime.now()
+        filename = f'{name}_asr_{now.strftime("%Y-%m-%d_%H-%M-%S")}.pkl'
+        with open(os.path.join(config.SAVED_MODELS_PATH, filename), 'wb') as handle:  # HZ
+            pickle.dump((best_models, asr), handle, protocol=pickle.HIGHEST_PROTOCOL)
+        print('Best model saved')

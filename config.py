@@ -6,6 +6,8 @@ FNAME_TASK = 'data/sample-task.xdf'
 # classification mode
 SAVE_MODEL = True
 SAVED_MODELS_PATH = 'models'
+CLASSIFICATION_METHOD = 'csp'
+PLOT_FEATURES = False
 
 # loading saved model
 MODEL_FNAME = 'Logistic_Regression_asr_2024-07-09_19-19-31.pkl'

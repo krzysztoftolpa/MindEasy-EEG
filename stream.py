@@ -8,14 +8,16 @@ from mne_lsl.stream import StreamLSL as Stream
 from mne_lsl.lsl import resolve_streams
 
 import config
-from power_features import calculate_powers_epoch
+from power_features import calculate_powers_epoch, calculate_complexity_epoch
 from utils import generate_eeg_metrics_json
 
 # reading model and ASR
 with open(os.path.join(config.SAVED_MODELS_PATH, config.MODEL_FNAME), 'rb') as handle:
     (best_models, asr) = pickle.load(handle)
 
+
 clf = best_models[list(best_models.keys())[0]]['model']
+
 
 player = Player(config.FIF_FNAME).start()
 print(player.info)
@@ -39,16 +41,30 @@ while time.time() - start_time <= config.STREAM_TIME:
     # print(data.shape)
     # remove mean
     # data = data - np.mean(data, axis=1, keepdims=True)
+  
+    if config.CLASSIFICATION_METHOD=='features':
+        results_epoch = calculate_powers_epoch(data, sfreq, channels, asr)
+        complexity_epoch = calculate_complexity_epoch(data, channels, asr)
+        df_powers = pd.DataFrame(results_epoch, columns=['channel', 'delta', 'delta_rel', 'theta', 'theta_rel', 'alpha',
+                                                        'alpha_rel', 'beta', 'beta_rel', 'gamma', 'gamma_rel'])
+        
+        df_complexity = pd.DataFrame(complexity_epoch, columns=['channel','sampen', 'appen', 'higuchi', 'katz'])
 
-    results_epoch = calculate_powers_epoch(data, sfreq, channels, asr)
-    df_epoch = pd.DataFrame(results_epoch, columns=['channel', 'delta', 'delta_rel', 'theta', 'theta_rel', 'alpha',
-                                                    'alpha_rel', 'beta', 'beta_rel', 'gamma', 'gamma_rel'])
+        df_epoch = df_powers.merge(df_complexity, on='channel')
 
-    X_epoch = df_epoch.drop(['channel'], axis=1)
+        X_epoch = df_epoch.drop(['channel'], axis=1)
 
-    scores = clf.predict_proba(X_epoch)
+        scores = clf.predict_proba(X_epoch)
+    
+    
+    if config.CLASSIFICATION_METHOD=='csp':
+        data = data.reshape(1, data.shape[0], data.shape[1])
+        features = clf['CSP'].transform(data)
+        scores = clf['classifier'].predict_proba(features)
+
     scores = np.mean(scores, axis=0)
     scores_list.append(scores)
+    print(scores)
     # Collect scores every 10 seconds
     if (time.time() - loop_start_time) >= config.INTERVAL:
 

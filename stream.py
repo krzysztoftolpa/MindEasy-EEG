@@ -18,14 +18,17 @@ with open(os.path.join(config.SAVED_MODELS_PATH, config.MODEL_FNAME), 'rb') as h
 
 clf = best_models[list(best_models.keys())[0]]['model']
 
+if config.PRERECORDED:
+    player = Player(config.FIF_FNAME).start()
+    print(player.info)
+    streams = resolve_streams()
 
-player = Player(config.FIF_FNAME).start()
-print(player.info)
-streams = resolve_streams()
 stream = Stream(bufsize=1).connect()
 print(stream.info)
 sfreq = stream.info['sfreq']
 channels = stream.info['ch_names']
+if len(channels):
+    channels = channels[:-1]
 # stream.set_eeg_reference("average") # setting reference to average of all channels found in buffer
 stream.filter(0.5, 40.0)  # filter 1.5, 40 Hz
 
@@ -36,9 +39,12 @@ loop_start_time = time.time()
 
 ##  MAIN LOOP   ##
 while time.time() - start_time <= config.STREAM_TIME:
+   
     # calculate power and in few seconds forwards them
-    data, ts = stream.get_data(winsize=None)
-    # print(data.shape)
+    
+    data, ts = stream.get_data(winsize=None, picks=['TP9', 'AF7', 'AF8', 'TP10'])
+    data = data*1e-6 
+    
     # remove mean
     # data = data - np.mean(data, axis=1, keepdims=True)
   
@@ -50,7 +56,8 @@ while time.time() - start_time <= config.STREAM_TIME:
         
         df_complexity = pd.DataFrame(complexity_epoch, columns=['channel','sampen', 'appen', 'higuchi', 'katz'])
 
-        df_epoch = df_powers.merge(df_complexity, on='channel')
+        df_epoch = df_powers.copy()
+        # df_epoch = df_powers.merge(df_complexity, on='channel')
 
         X_epoch = df_epoch.drop(['channel'], axis=1)
 

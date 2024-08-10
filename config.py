@@ -6,15 +6,16 @@ FNAME_TASK = 'data/sample-task.xdf'
 # classification mode
 SAVE_MODEL = True
 SAVED_MODELS_PATH = 'models'
-CLASSIFICATION_METHOD = 'csp'
+CLASSIFICATION_METHOD = 'features'
 PLOT_FEATURES = False
 
-# loading saved model
-MODEL_FNAME = 'Logistic_Regression_asr_2024-07-09_19-19-31.pkl'
+# loading saved model 
+MODEL_FNAME = 'logistic_regression_test_model_asr.pkl' # logistic_regression_test_model_asr.pkl
 
 # streaming
-FIF_FNAME = ''
-SUBJECT = ''
+FIF_FNAME = 'J:\\neuronica\\sub-Alberttask_ses-S001_task-Default_run-001_eeg.fif'
+SUBJECT = 'sub-Albert'
 CONDITION = ''
-STREAM_TIME = 31
+STREAM_TIME = 61
 INTERVAL = 10
+PRERECORDED = False

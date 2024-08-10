@@ -70,7 +70,6 @@ def extract_epochs_array(fname, asr):
     results = []
     for epoch in epochs:
 
-        # plt.plot(epoch[0,:])
         epoch = asr.transform(epoch)
 
         results.append(epoch)

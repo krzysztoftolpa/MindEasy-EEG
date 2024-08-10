@@ -1,5 +1,4 @@
 import numpy as np
-import scipy
 import pyxdf
 import mne
 from mne_features.univariate import (compute_samp_entropy, compute_app_entropy, compute_higuchi_fd, compute_katz_fd)
@@ -146,10 +145,10 @@ def calculate_complexity_epoch(epoch, channels, asr):
     katz = compute_katz_fd(epoch)
     
     metrics = np.vstack((sampen, appen, higuchi, katz)).T
+
+    
     results = np.hstack((np.array(channels).reshape(-1, 1), metrics))
     return results
-
-
 
 
 

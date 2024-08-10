@@ -37,7 +37,7 @@ df_all = asr_for_both_conditions(asr,
 df = balance_conditions(df_all, 'condition')
 
 X = df.drop(['channel', 'condition'], axis=1)
-y = df['condition']  # .replace({'norm': 0, 'sch': 1}).values
+y = df['condition']  
 
 ############################################################
 #               Features  GRID SEARCH                      #
@@ -141,5 +141,3 @@ elif config.CLASSIFICATION_METHOD=='csp':
         csp.fit_transform(epochs, labels)
 
         csp.plot_patterns(epochs_info, ch_type="eeg", units="Patterns (AU)", size=1.5)
-
-

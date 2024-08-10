@@ -1,8 +1,8 @@
 {
     "eeg_metrics": {
         "engagement": {
-            "focus": 0.45,
-            "mind_wandering": 0.55
+            "focus": 0.67,
+            "mind_wandering": 0.33
         }
     }
 }

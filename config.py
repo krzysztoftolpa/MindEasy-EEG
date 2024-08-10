@@ -10,7 +10,7 @@ CLASSIFICATION_METHOD = 'features'
 PLOT_FEATURES = False
 
 # loading saved model 
-MODEL_FNAME = 'logistic_regression_test_model_asr.pkl' # logistic_regression_test_model_asr.pkl
+MODEL_FNAME = 'Logistic_Regression_asr_2024-08-10_21-52-38.pkl' # logistic_regression_test_model_asr.pkl
 
 # streaming
 FIF_FNAME = 'J:\\neuronica\\sub-Alberttask_ses-S001_task-Default_run-001_eeg.fif'
@@ -18,4 +18,4 @@ SUBJECT = 'sub-Albert'
 CONDITION = ''
 STREAM_TIME = 61
 INTERVAL = 10
-PRERECORDED = False
+PRERECORDED = True #False

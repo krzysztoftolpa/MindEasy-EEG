@@ -24,6 +24,17 @@ def balance_conditions(df, condition_col):
 
 
 def generate_eeg_metrics_json(file_path, values):
+    """
+    Generates a JSON file with EEG metrics based on the provided values.
+
+    Parameters:
+    file_path (str): The path to the output JSON file.
+    values (list or array): An array or list containing two values: focus and mind_wandering.
+
+    Returns:
+    None
+    """
+    
     # Check if the values array has exactly two elements
     if len(values) != 2:
         raise ValueError("The input array must contain exactly two values.")
@@ -47,7 +58,13 @@ def generate_eeg_metrics_json(file_path, values):
 
 
 def extract_epochs_array(fname, asr):
+    """
+    Extracts epochs from a XDF file and applies ASR transformation.
 
+    :param fname: XDF file path
+    :param asr: ASR object
+    :return: list of epochs
+    """
     channels = ['TP9', 'AF7', 'AF8', 'TP10']
 
     # load data
@@ -78,6 +95,13 @@ def extract_epochs_array(fname, asr):
 
 
 def get_muse_info(fname):
+    """
+    Get MNE info from XDF file of MUSE band data.
+
+    :param fname: XDF file path
+    :return: MNE info object
+    """
+    
     channels = ['TP9', 'AF7', 'AF8', 'TP10']
 
     # load data

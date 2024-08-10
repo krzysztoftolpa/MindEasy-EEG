@@ -4,7 +4,7 @@ import mne
 from mne_features.univariate import (compute_samp_entropy, compute_app_entropy, compute_higuchi_fd, compute_katz_fd)
 
 def bandpower(data, sf, band, window_sec=None, relative=False):
-    """Compute the average power of the signal x in a specific frequency band.
+    '''Compute the average power of the signal x in a specific frequency band.
 
     Parameters
     ----------
@@ -25,9 +25,9 @@ def bandpower(data, sf, band, window_sec=None, relative=False):
     ------
     bp : float
         Absolute or relative band power.
-    """
+    '''
     from scipy.signal import welch
-    from scipy.integrate import simps
+    from scipy.integrate import simpson as simps
     band = np.asarray(band)
     low, high = band
 
@@ -55,7 +55,12 @@ def bandpower(data, sf, band, window_sec=None, relative=False):
 
 
 def calculate_powers_xdf(fname, asr):
-
+    '''
+    Calculate power features from XDF file
+    :param fname: XDF file name
+    :param asr: ASR object
+    :return: list of power features
+    '''
     channels = ['TP9', 'AF7', 'AF8', 'TP10']
 
     # load data
@@ -105,11 +110,18 @@ def calculate_powers_xdf(fname, asr):
 
 
 def calculate_powers_epoch(epoch, sfreq, channels, asr):
+    '''
+    Calculate powers for each channel in an epoch
+    :param epoch: array of epoch data
+    :param sfreq: sampling frequency
+    :param channels: list of channels
+    :param asr: mne object for filtering
+    :return: list of powers for each channel
+    '''
 
     results = []
     epoch = asr.transform(epoch)
-    # plt.plot(epoch[0,:])
-    # plt.show()
+    
     for idx, chan in enumerate(epoch):
 
         delta = bandpower(chan, sfreq, [0.5, 4], 1, relative=False)
@@ -132,12 +144,18 @@ def calculate_powers_epoch(epoch, sfreq, channels, asr):
     return results
 
 
-
 def calculate_complexity_epoch(epoch, channels, asr):
 
+    '''
+    Calculate complexity features for an epoch
+    :param epoch: array of epoch data
+    :param channels: list of channels
+    :param asr: mne object for filtering
+    :return: list of complexity features for each channel
+   
+    '''
    
     epoch = asr.transform(epoch)
-
 
     sampen = compute_samp_entropy(epoch, emb=2)
     appen = compute_app_entropy(epoch, emb = 2)
@@ -145,14 +163,18 @@ def calculate_complexity_epoch(epoch, channels, asr):
     katz = compute_katz_fd(epoch)
     
     metrics = np.vstack((sampen, appen, higuchi, katz)).T
-
-    
     results = np.hstack((np.array(channels).reshape(-1, 1), metrics))
     return results
 
 
 
 def calculate_complexity_xdf(fname, asr):
+    '''
+    Calculate complexity features for an xdf file
+    :param fname: path to xdf file
+    :param asr: mne object for filtering
+    :return: list of complexity features for each channel
+    '''
 
     channels = ['TP9', 'AF7', 'AF8', 'TP10']
 
@@ -176,10 +198,10 @@ def calculate_complexity_xdf(fname, asr):
     results = []
     for epoch in epochs:
 
-        # plt.plot(epoch[0,:])
+        # plt.plot(epoch[0,:]) 
         epoch = asr.transform(epoch)
         # plt.plot(epoch[0,:])
-        # plt.show()
+        # plt.show() #inspect ASR changes
         sampen = compute_samp_entropy(epoch, emb=2)
         appen = compute_app_entropy(epoch, emb = 2)
         higuchi = compute_higuchi_fd(epoch)

@@ -11,8 +11,8 @@ from flask import Flask, jsonify
 from waitress import serve
 
 import config
-from power_features import calculate_powers_epoch, calculate_complexity_epoch
-from utils import generate_eeg_metrics_json
+from utils.power_features import calculate_powers_epoch, calculate_complexity_epoch
+from utils.helpers import generate_eeg_metrics_json
 
 
 # reading model and ASR

@@ -10,11 +10,11 @@ from sklearn.model_selection import GridSearchCV
 
 
 import config
-from calibration import asr_calibration, asr_for_both_conditions, asr_epoched_for_both_conditions
-from utils import balance_conditions
+from utils.calibration import asr_calibration, asr_for_both_conditions, asr_epoched_for_both_conditions
+from utils.helpers import balance_conditions
 
 from mne.decoding import CSP
-from utils import get_muse_info
+from utils.helpers import get_muse_info
 
 
 CLASSIFIERS = {

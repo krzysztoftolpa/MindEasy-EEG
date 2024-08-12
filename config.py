@@ -13,8 +13,8 @@ PLOT_FEATURES = False
 MODEL_FNAME = 'Logistic_Regression_asr_2024-08-10_21-52-38.pkl' # logistic_regression_test_model_asr.pkl
 
 # streaming
-FIF_FNAME = 'J:\\neuronica\\sub-Alberttask_ses-S001_task-Default_run-001_eeg.fif'
-SUBJECT = 'sub-Albert'
+FIF_FNAME = 'data/sub-sample_task_ses-S001_task-Default_run-001_eeg.fif'
+SUBJECT = 'sub-sample'
 CONDITION = ''
 STREAM_TIME = 61
 INTERVAL = 10

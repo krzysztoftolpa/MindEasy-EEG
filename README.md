@@ -11,7 +11,7 @@ https://github.com/DawidPietrykowski/MindEasy/tree/main
 
 `stream.py` connects to LSL stream of EEG data and predicts the scores in realtime.
 
-`config.py` : Contains configuration arguments used by `classificator.py` and `stream.py`:
+`config.py` Contains configuration arguments for `classificator.py` and `stream.py`:
 
 
 #### EEG files
